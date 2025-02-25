@@ -1,0 +1,145 @@
+// Import Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Color Palette
+$primary-color: #1abc9c;
+$secondary-color: #16a085;
+$accent-color: #e67e22;
+$background-color: #ecf0f1;
+$text-color: #2c3e50;
+$light-gray: #bdc3c7;
+$dark-gray: #34495e;
+
+// Global Styles
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+.logo {
+  height: 90px;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+body {
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $primary-color;
+}
+
+a {
+  color: $secondary-color;
+  text-decoration: none;
+  transition: color 0.3s;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+button {
+  border-radius: 60px;
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
+  color: #0f8989;
+  border: none;
+  padding: 0.75em 1.5em;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Accordions
+.accordion-item {
+  background: rgb(39, 163, 229);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  
+  .accordion-header {
+    background: $primary-color;
+    border-radius: 8px;
+    h2 {
+      button {
+        color: white;
+        text-align: left;
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 1rem;
+        font-size: 1.2em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+        &:hover {
+          background: darken($primary-color, 10%);
+        }
+      }
+    }
+  }
+  
+  .accordion-body {
+    background: $light-gray;
+    color: $text-color;
+    padding: 1rem;
+    border-top: 1px solid $dark-gray;
+  }
+}
+
+// Cards
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5em;
+  }
+  button {
+    width: 100%;
+  }
+}
