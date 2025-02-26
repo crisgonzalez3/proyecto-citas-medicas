@@ -125,7 +125,7 @@
     <div class="container">
         <!-- Button to Add New Appointment -->
         <div class="text-center">
-            <a href="formulario.html" class="btn btn-primary new-appointment-btn">New Appointment</a>
+            <a href="formulario.php" class="btn btn-primary new-appointment-btn">New Appointment</a>
         </div>
 
         <!-- Table for Appointment List -->
@@ -175,53 +175,35 @@
     <script>
         let selectedUUID = null;
 
-        // Load appointments from CSV file
+        // Load appointments from the API
         async function loadAppointments() {
             try {
-                const response = await fetch('citas.csv');
-                const text = await response.text();
+                const response = await fetch('http://localhost:8000/api.php?action=list');
+                const data = await response.json();
 
-                Papa.parse(text, {
-                    complete: function(results) {
-                        const appointments = results.data;
-                        const tableBody = document.querySelector("#appointment-table tbody");
-                        tableBody.innerHTML = "";
+                const tableBody = document.querySelector("#appointment-table tbody");
+                tableBody.innerHTML = "";
 
-                        if (appointments.length === 0 || appointments[0].length < 2) {
-                            tableBody.innerHTML = `<tr><td colspan="6">No appointments found.</td></tr>`;
-                            return;
-                        }
+                if (data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5">No appointments found.</td></tr>`;
+                    return;
+                }
 
-                        for (let i = 1; i < appointments.length; i++) {
-                            const appointment = appointments[i];
-                            if (!appointment[0]) continue; // Skip empty rows
+                data.forEach(appointment => {
+                    const tr = document.createElement("tr");
 
-                            const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${appointment.date}</td>
+                        <td>${appointment.time}</td>
+                        <td>${appointment.patient}</td>
+                        <td>${appointment.description || 'No description'}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editAppointment('${appointment.uuid}')">Modify</button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${appointment.uuid}')">Delete</button>
+                        </td>
+                    `;
 
-                            for (let j = 1; j < appointment.length; j++) {
-                                tr.innerHTML += `
-                                    <td>
-                                        ${appointment[j]}
-                                    </td>
-                                `;
-                            }
-
-
-                            // Action buttons
-                            tr.innerHTML += `
-                                <td>
-                                    <button class="btn btn-warning btn-sm" onclick="editAppointment('${appointment[0]}')">Modify</button>
-                                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('${appointment[0]}')">Delete</button>
-                                </td>
-                            `;
-
-                            tableBody.appendChild(tr);
-                        }
-                    },
-                    error: function(error) {
-                        console.error('Error reading CSV file:', error.message);
-                        alert('Error loading appointments.');
-                    }
+                    tableBody.appendChild(tr);
                 });
             } catch (error) {
                 console.error('Error loading appointments:', error);
@@ -231,26 +213,8 @@
 
         // Edit appointment - redirects to form
         function editAppointment(uuid) {
-            window.location.href = `formulario.html?uuid=${uuid}`;
+            window.location.href = `formulario.php?uuid=${uuid}`;
         }
-
-        // Update appointment in the backend via GET
-        // function updateAppointment(uuid, fieldIndex, element) {
-        //     const newValue = encodeURIComponent(element.innerText.trim());
-
-        //     fetch(`http://localhost:8000/proyecto-citas-medicas/api.php?action=save&uuid=${uuid}&fieldIndex=${fieldIndex}&value=${newValue}`, {
-        //         method: "GET"
-        //     })
-        //     .then(response => response.json())
-        //     .then(result => {
-        //         if (!result.success) {
-        //             alert("Error saving appointment: " + result.message);
-        //         } else {
-        //             alert("Appointment updated successfully.");
-        //         }
-        //     })
-        //     .catch(error => console.error("Error updating appointment:", error));
-        // }
 
         // Confirm deletion of appointment
         function confirmDelete(uuid) {

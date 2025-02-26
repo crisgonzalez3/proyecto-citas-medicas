@@ -1,18 +1,27 @@
 <?php
-// Configuración de la base de datos
-$host = 'localhost'; // Servidor de la base de datos
-$dbname = 'proyecto_citas_medicas'; // Nombre de tu base de datos
-$username = 'root'; // Usuario de MySQL
-$password = ''; // Contraseña de MySQL
-$port = 3306; // Puerto de MySQL 
+class DB {
+    // Configuración de la base de datos
+    private $host = 'localhost'; // Servidor de la base de datos
+    private $dbname = 'proyecto_citas_medicas'; // Nombre de tu base de datos
+    private $username = 'root'; // Usuario de MySQL
+    private $password = ''; // Contraseña de MySQL
+    private $port = 3306; // Puerto de MySQL
+    private $conn;
 
-// Crear conexión (asegúrate de usar las variables correctas)
-$conn = new mysqli($host, $username, $password, $dbname, $port);
+    public function __construct() {
+        // Usamos PDO en lugar de mysqli
+        $dsn = "mysql:host={$this->host};dbname={$this->dbname};port={$this->port}";
+        try {
+            $this->conn = new PDO($dsn, $this->username, $this->password);
+            // Configuramos el modo de error a excepciones
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
+        }
+    }
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die('Error de conexión: ' . $conn->connect_error);
-} else {
-    echo "Conexión exitosa a la base de datos.";
+    public function getConnection() {
+        return $this->conn;
+    }
 }
 ?>

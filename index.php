@@ -24,13 +24,13 @@ $view = isset($_GET['action']) ? $_GET['action'] : 'index'; // Si no se pasa 'ac
 // Comprobamos qué vista queremos cargar
 switch ($view) {
     case 'calendar':
-        include_once 'calendar.html';  // Vista del calendario
+        include_once 'calendar.php';  // Vista del calendario
         break;
     case 'formulario':
-        include_once 'formulario.html';  // Vista del formulario
+        include_once 'formulario.php';  // Vista del formulario
         break;
     case 'list':
-        include_once 'list.html';  // Vista de la lista de citas
+        include_once 'list.php';  // Vista de la lista de citas
         break;
     case 'login':
         include_once 'login.php'; //Vista del login
@@ -39,7 +39,7 @@ switch ($view) {
         include_once 'logout.php';  // Cerrar sesión
          break;
     default:
-        include_once 'home.html';  // Vista por defecto (home)
+        include_once 'home.php';  // Vista por defecto (home)
         break;
 }
 // Incluir el footer
