@@ -175,6 +175,16 @@
     <script>
         let selectedUUID = null;
 
+        // Función para formatear la hora al formato HH:MM
+        function formatTime(time) {
+            // Verificar si la hora es válida
+            const parts = time.split(':');  // Asumiendo que el formato es HH:MM:SS o HH:MM
+            if (parts.length < 2) return time;  // Si no tiene un formato esperado, retornar como está
+
+            // Tomar solo las primeras dos partes (horas y minutos)
+            return parts[0] + ':' + parts[1];
+        }
+
         // Load appointments from the API
         async function loadAppointments() {
             try {
@@ -192,9 +202,12 @@
                 data.forEach(appointment => {
                     const tr = document.createElement("tr");
 
+                    // Usar la función formatTime para convertir la hora
+                    const formattedTime = formatTime(appointment.time);
+
                     tr.innerHTML = `
                         <td>${appointment.date}</td>
-                        <td>${appointment.time}</td>
+                        <td>${formattedTime}</td> <!-- Mostrar la hora formateada -->
                         <td>${appointment.patient}</td>
                         <td>${appointment.description || 'No description'}</td>
                         <td>
