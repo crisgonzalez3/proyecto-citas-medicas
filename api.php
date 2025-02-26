@@ -4,6 +4,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, HEAD, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
+require_once 'db.php'; // Asegúrate de incluir la conexión a la base de datos
+
 // Responder a las solicitudes OPTIONS
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -11,7 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 class Dispatcher {
-    private $filename = 'citas.csv'; // Cambiado a citas.csv
+    private $pdo;
+
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
 
     public function dispatch($action) {
         $allowedActions = ['list', 'get', 'save', 'delete', 'saveCsv'];
@@ -45,44 +51,26 @@ class Dispatcher {
     }
 
     private function list() {
-        $appointments = [];
-        if (($handle = fopen($this->filename, "r")) !== FALSE) {
-            while (($data = fgetcsv($handle)) !== FALSE) {
-                $appointments[] = [
-                    'uuid' => $data[0],
-                    'date' => $data[1],
-                    'time' => $data[2],
-                    'patient' => $data[3],
-                    'description' => $data[4]
-                ];
-            }
-            fclose($handle);
-        }
+        $stmt = $this->pdo->query("SELECT * FROM citas");
+        $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->responseJson($appointments);
     }
 
     private function get() {
         $uuid = $_GET['uuid'] ?? '';
         if ($uuid) {
-            if (($handle = fopen($this->filename, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    if ($data[0] == $uuid) {
-                        $appointment = [
-                            'uuid' => $data[0],
-                            'date' => $data[1],
-                            'time' => $data[2],
-                            'patient' => $data[3],
-                            'description' => $data[4]
-                        ];
-                        fclose($handle);
-                        $this->responseJson($appointment);
-                        return;
-                    }
-                }
-                fclose($handle);
+            $stmt = $this->pdo->prepare("SELECT * FROM citas WHERE uuid = ?");
+            $stmt->execute([$uuid]);
+            $appointment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($appointment) {
+                $this->responseJson($appointment);
+            } else {
+                $this->responseJson(['success' => false, 'message' => 'Cita no encontrada'], 404);
             }
+        } else {
+            $this->responseJson(['success' => false, 'message' => 'UUID no proporcionado'], 400);
         }
-        $this->responseJson(['success' => false, 'message' => 'Cita no encontrada'], 404);
     }
 
     private function save() {
@@ -90,34 +78,21 @@ class Dispatcher {
 
         if ($input) {
             $uuid = $input['uuid'] ?? $this->generateUUID();
-            $appointments = [];
-            $updated = false;
+            $stmt = $this->pdo->prepare("SELECT * FROM citas WHERE uuid = ?");
+            $stmt->execute([$uuid]);
+            $existingAppointment = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (($handle = fopen($this->filename, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    if ($data[0] != $uuid) {
-                        $appointments[] = $data;
-                    } else {
-                        $appointments[] = [$uuid, $input['date'], $input['time'], $input['patient'], $input['description']];
-                        $updated = true;
-                    }
-                }
-                fclose($handle);
-            }
-
-            if (!$updated) {
-                $appointments[] = [$uuid, $input['date'], $input['time'], $input['patient'], $input['description']];
-            }
-
-            if (($handle = fopen($this->filename, "w")) !== FALSE) {
-                foreach ($appointments as $appointment) {
-                    fputcsv($handle, $appointment);
-                }
-                fclose($handle);
-                $this->responseJson(['success' => true], 201);
+            if ($existingAppointment) {
+                // Si la cita ya existe, actualizamos
+                $stmt = $this->pdo->prepare("UPDATE citas SET date = ?, time = ?, patient = ?, description = ? WHERE uuid = ?");
+                $stmt->execute([$input['date'], $input['time'], $input['patient'], $input['description'], $uuid]);
             } else {
-                $this->responseJson(['success' => false, 'message' => 'No se pudo abrir el archivo CSV'], 500);
+                // Si no existe, la insertamos
+                $stmt = $this->pdo->prepare("INSERT INTO citas (uuid, date, time, patient, description) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$uuid, $input['date'], $input['time'], $input['patient'], $input['description']]);
             }
+
+            $this->responseJson(['success' => true], 201);
         } else {
             $this->responseJson(['success' => false, 'message' => 'Datos inválidos'], 400);
         }
@@ -126,24 +101,13 @@ class Dispatcher {
     private function delete() {
         $uuid = $_GET['uuid'] ?? '';
         if ($uuid) {
-            $appointments = [];
-            if (($handle = fopen($this->filename, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    if ($data[0] != $uuid) {
-                        $appointments[] = $data;
-                    }
-                }
-                fclose($handle);
-            }
+            $stmt = $this->pdo->prepare("DELETE FROM citas WHERE uuid = ?");
+            $stmt->execute([$uuid]);
 
-            if (($handle = fopen($this->filename, "w")) !== FALSE) {
-                foreach ($appointments as $appointment) {
-                    fputcsv($handle, $appointment);
-                }
-                fclose($handle);
+            if ($stmt->rowCount() > 0) {
                 $this->responseJson(['success' => true]);
             } else {
-                $this->responseJson(['success' => false, 'message' => 'No se pudo abrir el archivo CSV'], 500);
+                $this->responseJson(['success' => false, 'message' => 'Cita no encontrada'], 404);
             }
         } else {
             $this->responseJson(['success' => false, 'message' => 'UUID no proporcionado'], 400);
@@ -154,29 +118,13 @@ class Dispatcher {
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (isset($input['appointments']) && is_array($input['appointments'])) {
-            $appointments = [];
-
-            if (($handle = fopen($this->filename, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    $appointments[] = $data;
-                }
-                fclose($handle);
-            }
-
             foreach ($input['appointments'] as $appointmentData) {
                 $uuid = $this->generateUUID();
-                $appointments[] = [$uuid, $appointmentData[0], $appointmentData[1], $appointmentData[2], $appointmentData[3]];
+                $stmt = $this->pdo->prepare("INSERT INTO citas (uuid, date, time, patient, description) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$uuid, $appointmentData[0], $appointmentData[1], $appointmentData[2], $appointmentData[3]]);
             }
 
-            if (($handle = fopen($this->filename, "w")) !== FALSE) {
-                foreach ($appointments as $appointment) {
-                    fputcsv($handle, $appointment);
-                }
-                fclose($handle);
-                $this->responseJson(['success' => true], 201);
-            } else {
-                $this->responseJson(['success' => false, 'message' => 'No se pudo abrir el archivo CSV'], 500);
-            }
+            $this->responseJson(['success' => true], 201);
         } else {
             $this->responseJson(['success' => false, 'message' => 'Datos inválidos'], 400);
         }
@@ -201,6 +149,6 @@ class Dispatcher {
 
 // Instanciamos y ejecutamos el Dispatcher
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
-$dispatcher = new Dispatcher();
+$dispatcher = new Dispatcher($pdo); // Pasamos la conexión a la base de datos
 $dispatcher->dispatch($action);
 ?>

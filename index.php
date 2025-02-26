@@ -10,6 +10,8 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
     exit;
 }
+// Incluir la conexión a la base de datos
+include('db.php');
 // Cargar el header
 // Usando include
 include('header.php');

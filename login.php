@@ -9,25 +9,43 @@ if (!empty($_SESSION['usuario'])) {
     header('Location: index.php');
     exit();
 }
+
+// Incluir la conexión a la base de datos
+include('db.php'); 
 include('header.php');
-// Usuario y contraseña definidos (en una app real, estos vendrían de una base de datos)
-$usuario_correcto = 'admin';
-$contraseña_correcta = password_hash('123456', PASSWORD_DEFAULT); // Contraseña encriptada
+
+$error = ''; // Variable para almacenar mensajes de error
 
 // Procesar el formulario al enviarlo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['usuario']);
     $contraseña = trim($_POST['contraseña']);
 
-    // Validar credenciales
-    if ($usuario === $usuario_correcto && password_verify($contraseña, $contraseña_correcta)) {
-        $_SESSION['usuario'] = $usuario; // Guardar usuario en la sesión
-        header('Location: index.php'); // Redirigir al índice
-        exit();
+    // Consulta para obtener el usuario y la contraseña desde la base de datos
+    $stmt = $conn->prepare('SELECT user, password FROM usuario WHERE user = ? LIMIT 1');
+    $stmt->bind_param('s', $usuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows === 1) {
+        $fila = $resultado->fetch_assoc();
+        
+        // Comparar la contraseña con el hash de la base de datos
+        if (password_verify($contraseña, $fila['password'])) {
+            $_SESSION['usuario'] = $fila['user']; // Guardar el nombre de usuario en la sesión
+            header('Location: index.php'); // Redirigir al índice
+            exit();
+        } else {
+            $error = 'Contraseña incorrecta.';
+        }
     } else {
-        $error = 'Usuario o contraseña incorrectos.';
+        $error = 'El usuario no existe.';
     }
+    
+    $stmt->close();
 }
+
+$conn->close(); // Cerrar la conexión
 ?>
 
 <!DOCTYPE html>
@@ -64,6 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
             </form>
+
+            <!-- Botón de registro -->
+            <div class="mt-3 text-center">
+                <a href="registro.php" class="btn btn-secondary w-100">¿No tienes cuenta? Regístrate</a>
+            </div>
         </div>
     </div>
 
@@ -71,8 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 <?php
 // Incluir el footer
 include('footer.php');
 ?>
-
