@@ -16,23 +16,25 @@ include('header.php');
 
 $error = ''; // Variable para almacenar mensajes de error
 
+// Crear una instancia de la clase DB y obtener la conexión
+$db = new DB();
+$conn = $db->getConnection(); // Obtener la conexión PDO
+
 // Procesar el formulario al enviarlo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['usuario']);
     $contraseña = trim($_POST['contraseña']);
 
     // Consulta para obtener el usuario y la contraseña desde la base de datos
-    $stmt = $conn->prepare('SELECT user, password FROM usuario WHERE user = ? LIMIT 1');
-    $stmt->bind_param('s', $usuario);
+    $stmt = $conn->prepare('SELECT user, password FROM usuario WHERE user = :usuario LIMIT 1');
+    $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
     $stmt->execute();
-    $resultado = $stmt->get_result();
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($resultado->num_rows === 1) {
-        $fila = $resultado->fetch_assoc();
-        
+    if ($resultado) {
         // Comparar la contraseña con el hash de la base de datos
-        if (password_verify($contraseña, $fila['password'])) {
-            $_SESSION['usuario'] = $fila['user']; // Guardar el nombre de usuario en la sesión
+        if (password_verify($contraseña, $resultado['password'])) {
+            $_SESSION['usuario'] = $resultado['user']; // Guardar el nombre de usuario en la sesión
             header('Location: index.php'); // Redirigir al índice
             exit();
         } else {
@@ -41,11 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $error = 'El usuario no existe.';
     }
-    
-    $stmt->close();
 }
 
-$conn->close(); // Cerrar la conexión
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +62,7 @@ $conn->close(); // Cerrar la conexión
         <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
             <h1 class="text-center mb-4">Iniciar sesión</h1>
 
-            <?php if (isset($error)): ?>
+            <?php if (isset($error) && $error): ?>
                 <div class="alert alert-danger" role="alert">
                     <?php echo htmlspecialchars($error); ?>
                 </div>

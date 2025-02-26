@@ -1,6 +1,12 @@
 <?php
 // Incluir la conexión a la base de datos
 include('db.php');
+include('header.php');
+
+// Crear una instancia de la clase DB para obtener la conexión
+$db = new DB();
+$conn = $db->getConnection();
+
 ?>
 
 <!DOCTYPE html>
@@ -44,21 +50,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user']);
     $password = trim($_POST['password']);
     
-    // Verificar si el correo ya está registrado
-    $stmt = $conn->prepare('SELECT id FROM usuario WHERE email = ? OR user = ? LIMIT 1');
-    $stmt->bind_param('ss', $email, $user);
+    // Verificar si el correo ya está registrado (con PDO)
+    $stmt = $conn->prepare('SELECT id FROM usuario WHERE email = :email OR user = :user LIMIT 1');
+    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':user', $user);
     $stmt->execute();
-    $resultado = $stmt->get_result();
 
-    if ($resultado->num_rows > 0) {
+    if ($stmt->rowCount() > 0) {
         echo '<p style="color: red;">¡El correo o el nombre de usuario ya están registrados!</p>';
     } else {
         // Hashear la contraseña
         $passwordHasheada = password_hash($password, PASSWORD_DEFAULT);
         
         // Insertar el nuevo usuario en la base de datos
-        $stmt = $conn->prepare('INSERT INTO usuario (name, surname, email, user, password) VALUES (?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssss', $name, $surname, $email, $user, $passwordHasheada);
+        $stmt = $conn->prepare('INSERT INTO usuario (name, surname, email, user, password) VALUES (:name, :surname, :email, :user, :password)');
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':surname', $surname);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':user', $user);
+        $stmt->bindValue(':password', $passwordHasheada);
         
         if ($stmt->execute()) {
             echo '<p style="color: green;">¡Usuario registrado exitosamente!</p>';
@@ -67,14 +77,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: login.php');
             exit();  // Es importante usar exit() después de header() para asegurarse de que el script se detenga aquí
         } else {
-            echo '<p style="color: red;">Error al registrar el usuario: ' . $stmt->error . '</p>';
+            echo '<p style="color: red;">Error al registrar el usuario.</p>';
         }
-
-        $stmt->close();
     }
-
-    $conn->close(); // Cerrar la conexión a la base de datos
 }
+?>
+
+<?php
+// Incluir el footer
+include('footer.php');
 ?>
 
 </body>
