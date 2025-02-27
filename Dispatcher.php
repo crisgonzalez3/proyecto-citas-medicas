@@ -7,21 +7,18 @@ header('Access-Control-Allow-Headers: Content-Type');
 // Incluir el archivo de conexión a la base de datos
 include('db.php');
 
-// Crear la conexión a la base de datos
-$db = new DB();
-$pdo = $db->getConnection();  // Obtener la conexión a la base de datos
-
 // Responder a las solicitudes OPTIONS
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+//     http_response_code(200);
+//     exit();
+// }
 
 class Dispatcher {
     private $pdo;
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
+    // Constructor que recibe la conexión PDO
+    public function __construct() {
+        $this->pdo = DB::getConnection();
     }
 
     public function init() {
@@ -31,7 +28,7 @@ class Dispatcher {
 
     public function dispatch($action) {
         $allowedActions = [
-            'list', 'get', 'save', 'delete', 'saveCsv', 
+            'list', 'get', 'save', 'delete', 
             'listUsuarios', 'getUsuario', 'saveUsuario', 'deleteUsuario'
         ];
 
@@ -54,9 +51,6 @@ class Dispatcher {
                     break;
                 case 'delete':
                     $this->delete();
-                    break;
-                case 'saveCsv':
-                    $this->saveCsv();
                     break;
 
                 // Acciones para la tabla usuario
@@ -116,7 +110,7 @@ class Dispatcher {
     
         // Preparamos la consulta para insertar los datos en la base de datos
         $stmt = $this->pdo->prepare("INSERT INTO citas (uuid, date, time, patient, description) VALUES (?, ?, ?, ?, ?)");
-        $result = $stmt->execute([
+        $result = $stmt->execute([ 
             $data['uuid'], 
             $data['date'], 
             $data['time'], 
@@ -131,7 +125,6 @@ class Dispatcher {
             $this->responseJson(['success' => false, 'message' => 'Error al guardar la cita'], 500);
         }
     }
-    
 
     private function delete() {
         $uuid = $_GET['uuid'] ?? '';  // Obtener el UUID desde los parámetros de la URL
@@ -225,9 +218,11 @@ class Dispatcher {
     }
 }
 
-// Instanciamos y ejecutamos el Dispatcher
-$action = $_GET['action'] ?? $_POST['action'] ?? '';
-$dispatcher = new Dispatcher($pdo); // Pasamos la conexión a la base de datos
-$dispatcher->dispatch($action);
+// Crear una instancia de Dispatcher
+$disp = new Dispatcher();  // Aquí instanciamos el objeto
+
+// Obtener la acción desde la URL y llamar al método dispatch()
+$action = $_GET['action'] ?? '';  // Si no hay acción, usamos una cadena vacía
+$disp->dispatch($action);  // Llamamos al método dispatch
 
 ?>

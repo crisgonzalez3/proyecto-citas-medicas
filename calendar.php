@@ -76,7 +76,7 @@
         $(document).ready(function() {
             // Cambios en la función loadAppointments
             function loadAppointments() {
-                fetch('api.php?action=list')  // Llamamos a la acción 'list' de la API
+                fetch('Dispatcher.php?action=list')  // Llamamos a la acción 'list' de la API
                     .then(response => response.json())  // Parseamos la respuesta JSON
                     .then(data => {
                         console.log("Datos de las citas:", data);  // Ver los datos recibidos

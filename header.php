@@ -27,6 +27,8 @@ if (session_status() === PHP_SESSION_NONE) {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
+    <!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header class="navbar navbar-expand-lg navbar-dark fixed-top">

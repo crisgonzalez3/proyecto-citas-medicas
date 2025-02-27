@@ -188,7 +188,7 @@
         // Load appointments from the API
         async function loadAppointments() {
             try {
-                const response = await fetch('http://localhost:8000/api.php?action=list');
+                const response = await fetch('http://localhost:8000/Dispatcher.php?action=list');
                 const data = await response.json();
 
                 const tableBody = document.querySelector("#appointment-table tbody");
@@ -240,7 +240,7 @@
         function deleteAppointment() {
             if (!selectedUUID) return;
 
-            fetch(`http://localhost:8000/api.php?action=delete&uuid=${selectedUUID}`, {
+            fetch(`http://localhost:8000/Dispatcher.php?action=delete&uuid=${selectedUUID}`, {
                 method: "GET"
             })
             .then(response => response.json())

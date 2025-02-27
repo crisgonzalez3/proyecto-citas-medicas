@@ -144,7 +144,7 @@
             console.log("Form Data to Send:", Array.from(formData.entries())); // Verificación de los datos a enviar
 
             // Enviar los datos del formulario a la API
-            fetch('http://localhost:8000/api.php?action=save', {
+            fetch('http://localhost:8000/Dispatcher.php?action=save', {
                 method: 'POST',
                 body: formData
             })
