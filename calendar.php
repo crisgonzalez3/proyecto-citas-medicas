@@ -1,3 +1,10 @@
+<?php
+// Comprobar si el usuario está logueado
+if (!isset($_SESSION['usuario'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +83,7 @@
         $(document).ready(function() {
             // Cambios en la función loadAppointments
             function loadAppointments() {
-                fetch('Dispatcher.php?action=list')  // Llamamos a la acción 'list' de la API
+                fetch('index.php?action=list')  // Llamamos a la acción 'list' de la API
                     .then(response => response.json())  // Parseamos la respuesta JSON
                     .then(data => {
                         console.log("Datos de las citas:", data);  // Ver los datos recibidos

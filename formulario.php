@@ -1,3 +1,5 @@
+<?php
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,49 +121,54 @@
 
         // Al cargar la página, generamos una UUID y la asignamos al campo oculto
         window.onload = function() {
-            const generatedUUID = generateUUID();
-            document.getElementById('uuid').value = generatedUUID;
-            console.log("Generated UUID:", generatedUUID); // Verificación de UUID generada
-        };
+    const urlParams = new URLSearchParams(window.location.search);
+    const uuidFromUrl = urlParams.get('uuid');  // Obtener el UUID desde la URL
 
-        // Función para validar los campos del formulario antes de enviarlo
-        document.getElementById('appointment-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+    if (uuidFromUrl) {
+        // Si existe el UUID, cargamos la cita y completamos el formulario con los datos existentes
+        document.getElementById('uuid').value = uuidFromUrl;
+        loadAppointmentData(uuidFromUrl); // Cargar los datos de la cita
+    } else {
+        // Si no existe UUID, generamos uno nuevo
+        const generatedUUID = generateUUID();
+        document.getElementById('uuid').value = generatedUUID;
+    }
+};
 
-            // Obtener los valores de los campos del formulario
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            const patient = document.getElementById('patient').value;
+// Función para cargar los datos de la cita desde la API
+function loadAppointmentData(uuid) {
+    fetch(`http://localhost:8000/Dispatcher.php?action=get&uuid=${uuid}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  // Verificar la respuesta
 
-            // Validar si los campos obligatorios están llenos
-            if (!date || !time || !patient) {
-                alert("Please fill in all required fields (Date, Time, and Patient Name).");
-                return; // Detener el envío si falta algún campo obligatorio
-            }
+            if (data.success !== false) {
+                document.getElementById('date').value = data.date;
+                let time = data.time;
+                if (time) {
+                    // Eliminar los milisegundos si los hay, y dejar solo HH:mm:ss
+                    time = time.split('.')[0]; // Elimina los milisegundos (si existen)
 
-            // Crear un objeto FormData con los datos del formulario
-            const formData = new FormData(this);
-            console.log("Form Data to Send:", Array.from(formData.entries())); // Verificación de los datos a enviar
+                    console.log('Time recibido y ajustado:', time);  // Verificar el valor de time ajustado
 
-            // Enviar los datos del formulario a la API
-            fetch('http://localhost:8000/Dispatcher.php?action=save', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Appointment saved successfully!');
-                    window.location.href = 'index.php'; // Redirige a la página de inicio después de guardar
-                } else {
-                    alert('Error saving appointment: ' + data.message);
+                    // Asignar el valor de time directamente al campo de entrada
+                    document.getElementById('time').value = time;
                 }
-            })
-            .catch(error => {
-                console.error('Error saving appointment:', error);
-                alert('An error occurred while saving the appointment.');
-            });
+
+                document.getElementById('patient').value = data.patient;
+                document.getElementById('description').value = data.description || '';
+            } else {
+                alert('Error al cargar la cita');
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar la cita:', error);
+            alert('Error al cargar los datos de la cita');
         });
+}
+
+
+
     </script>
 </body>
 </html>

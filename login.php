@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Comparar la contraseña con el hash de la base de datos
         if (password_verify($contraseña, $resultado['password'])) {
             $_SESSION['usuario'] = $resultado['user']; // Guardar el nombre de usuario en la sesión
-            header('Location: index.php'); // Redirigir al índice
+            header('Location: index.php?action=home'); // Redirigir al índice
             exit();
         } else {
             $error = 'Contraseña incorrecta.';

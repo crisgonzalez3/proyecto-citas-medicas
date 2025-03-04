@@ -141,7 +141,7 @@
         
         <div class="button-container">
             <button class="btn btn-custom" onclick="window.location.href='index.php?action=formulario'">New Appointment</button>
-            <button class="btn btn-custom" onclick="window.location.href='index.php?action=list'">Appointment List</button>
+            <button class="btn btn-custom" onclick="window.location.href='index.php?action=listview'">Appointment List</button>
             <button class="btn btn-custom" onclick="window.location.href='index.php?action=calendar'">View Calendar</button>
         </div>
     </div>

@@ -33,7 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="index.php?action=home">
                 <img src="logo.jpg" alt="Logo" class="logo" style="height: 50px; margin-right: 30px;">
                 Dental Clinic
             </a>
@@ -43,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         <a class="nav-link" href="index.php?action=formulario">New Appointment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?action=list">Appointment List</a>
+                        <a class="nav-link" href="index.php?action=listview">Appointment List</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?action=calendar">Calendar</a>
