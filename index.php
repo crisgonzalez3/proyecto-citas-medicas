@@ -12,17 +12,22 @@ if (!isset($_SESSION['usuario'])) {
 // Incluir la conexión a la base de datos
 include_once('db.php');
 
-// Incluir el Dispatcher y ejecutarlo
-include('Dispatcher.php');
+// Definir la vista por defecto
+global $view;
+$view = $_GET['action'] ?? 'home'; // Si no se proporciona una acción, carga 'home'
 
+// Incluir el header
+include('header.php');
 
-// Cargar el header
-// include('header.php');
+// Incluir la vista correspondiente si el archivo existe
+$viewFile = $view . '.php';
+if (file_exists($viewFile)) {
+    include($viewFile);
+} else {
+    // Mostrar un mensaje si la vista no existe
+    echo "<h2>Página no encontrada</h2>";
+}
 
-// Obtener la vista a mostrar desde la URL
-// $view = isset($_GET['action']) ? $_GET['action'] : 'index'; 
-
-
-// Cargar el footer
-// include('footer.php');
+// Incluir el footer
+include('footer.php');
 ?>

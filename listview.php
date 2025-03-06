@@ -1,3 +1,19 @@
+<?php
+//cURL en PHP para realizar una solicitud HTTP a un servidor y procesar la respuesta en formato JSON
+$ch = curl_init(); //Inicia cURL
+curl_setopt($ch, CURLOPT_URL, "http://localhost/proyecto-citas-medicas/Dispatcher.php?action=list"); //Configuración de la solicitud
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch); //Ejecutamos la solicitud y obtenemos respuesta
+curl_close($ch); //Cerramos sesión
+
+$appointments = json_decode($response, true); //Convertimos la respuesta (JSON) a un array asociativo de PHP
+
+// Manejo de errores en la conversión JSON
+if ($appointments === null) {
+    $appointments = [];
+}
+
+?>
 <body>
     <!-- list.php -->
 <div class="table-responsive mt-4">

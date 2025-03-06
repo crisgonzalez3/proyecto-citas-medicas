@@ -136,36 +136,32 @@
 };
 
 // Función para cargar los datos de la cita desde la API
-function loadAppointmentData(uuid) {
-    fetch(`http://localhost:8000/Dispatcher.php?action=get&uuid=${uuid}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);  // Verificar la respuesta
+document.getElementById('appointment-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío tradicional del formulario
 
-            if (data.success !== false) {
-                document.getElementById('date').value = data.date;
-                let time = data.time;
-                if (time) {
-                    // Eliminar los milisegundos si los hay, y dejar solo HH:mm:ss
-                    time = time.split('.')[0]; // Elimina los milisegundos (si existen)
+    // Obtener los datos del formulario
+    const formData = new FormData(this);
 
-                    console.log('Time recibido y ajustado:', time);  // Verificar el valor de time ajustado
+    // Hacer la solicitud AJAX con los datos
+    fetch('http://localhost:8000/Dispatcher.php?action=save', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json()) // Suponiendo que el servidor devuelve JSON
+    .then(data => {
+        if (data.success) {
+            alert('Cita guardada con éxito');
+            window.location.href = 'index.php?action=listview';  // Redirigir o hacer algo después de guardar
+        } else {
+            alert('Error al guardar la cita');
+        }
+    })
+    .catch(error => {
+        console.error('Error al guardar la cita:', error);
+        alert('Hubo un error al guardar la cita');
+    });
+});
 
-                    // Asignar el valor de time directamente al campo de entrada
-                    document.getElementById('time').value = time;
-                }
-
-                document.getElementById('patient').value = data.patient;
-                document.getElementById('description').value = data.description || '';
-            } else {
-                alert('Error al cargar la cita');
-            }
-        })
-        .catch(error => {
-            console.error('Error al cargar la cita:', error);
-            alert('Error al cargar los datos de la cita');
-        });
-}
 
 
 
