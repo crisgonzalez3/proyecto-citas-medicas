@@ -1,21 +1,23 @@
 <?php
-// Devolvemos la respuesta en JSON
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
+// Devolvemos la respuesta en formato JSON
+header('Content-Type: application/json'); // Define el tipo de contenido como JSON.
+header('Access-Control-Allow-Origin: *'); // Permite solicitudes desde cualquier origen.
+header('Access-Control-Allow-Methods: GET, POST, DELETE'); // Especifica qué métodos HTTP son permitidos.
+header('Access-Control-Allow-Headers: Content-Type'); // Permite el encabezado Content-Type.
 
-// Incluimos la conexión a la base de datos
-require_once 'db.php'; // Asegúrate de incluir el archivo de conexión
+require_once 'db.php'; // Incluye la conexión a la base de datos (asegúrate de que el archivo db.php existe).
 
-// Leemos el cuerpo de la petición
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
 
-// Obtenemos la acción
+// Leemos el cuerpo de la petición (en formato JSON) enviado por el cliente.
+$input = file_get_contents('php://input'); 
+$data = json_decode($input, true); // Decodifica el JSON en un array asociativo.
+
+
+// Obtenemos la acción que se quiere realizar, que viene en el JSON.
 $action = isset($data['action']) ? $data['action'] : null;
 
-switch ($action) {
+switch ($action) { 
+    
     // ACCIONES PARA LA TABLA `USUARIO`
     
     // Crear un nuevo usuario
@@ -26,6 +28,7 @@ switch ($action) {
         $user = $data['data']['user'] ?? '';
         $password = $data['data']['password'] ?? '';
         
+        // Si los datos son completos, ejecuta la inserción en la base de datos.
         if ($name && $surname && $email && $user && $password) {
             $stmt = $pdo->prepare("INSERT INTO usuario (name, surname, email, user, password) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$name, $surname, $email, $user, password_hash($password, PASSWORD_DEFAULT)]);
@@ -37,6 +40,7 @@ switch ($action) {
         
     // Actualizar usuario
     case 'update_user':
+        // Recibe la ID del usuario y los nuevos datos para actualizar.
         $id = $data['id'] ?? null;
         $name = $data['data']['name'] ?? '';
         $surname = $data['data']['surname'] ?? '';
@@ -44,6 +48,7 @@ switch ($action) {
         $user = $data['data']['user'] ?? '';
         $password = $data['data']['password'] ?? '';
         
+        // Verifica que los datos sean completos antes de actualizar.
         if ($id && $name && $surname && $email && $user && $password) {
             $stmt = $pdo->prepare("UPDATE usuario SET name = ?, surname = ?, email = ?, user = ?, password = ? WHERE id = ?");
             $stmt->execute([$name, $surname, $email, $user, password_hash($password, PASSWORD_DEFAULT), $id]);
@@ -126,7 +131,7 @@ switch ($action) {
         break;
 
     default:
-        // Acción desconocida
+        // Si la acción no es reconocida, se devuelve un error.
         echo json_encode(["error" => "Acción no reconocida"]);
         break;
 }

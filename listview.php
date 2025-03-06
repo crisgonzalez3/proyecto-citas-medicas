@@ -41,13 +41,13 @@ if ($appointments === null) {
                         <td><?= htmlspecialchars($appointment['description'] ?? 'No description'); ?></td>
                         <td>
                             <!-- Botón para modificar -->
-                            <form action="Dispatcher.php" method="get" style="display: inline;">
+                            <form action="index.php" method="GET" style="display: inline;">
                                 <input type="hidden" name="uuid" value="<?= htmlspecialchars($appointment['uuid']); ?>">
                                 <input type="hidden" name="action" value="formulario"> <!-- Especificar la acción como 'save' -->
                                 <button type="submit" class="btn btn-warning btn-sm">Modify</button>
                             </form>
                             <!-- Botón para eliminar -->
-                            <form action="Dispatcher.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <form action="index.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
                                 <input type="hidden" name="uuid" value="<?= htmlspecialchars($appointment['uuid']); ?>">
                                 <input type="hidden" name="action" value="delete"> <!-- Especificar la acción como 'delete' -->
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
