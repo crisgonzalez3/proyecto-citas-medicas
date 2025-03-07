@@ -1,27 +1,17 @@
 <?php
-// // Asegúrate de que la sesión se inicie solo si no está activa
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
-// // Destruir la sesión
-// session_unset();
-// session_destroy();
-// // Redirigir al login
-// header("Location: index.php?action=login");
-// exit();
-// Asegúrate de que la sesión se inicie solo si no está activa
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Iniciar sesión si no está iniciada
+session_start();
+
+// Eliminar todas las variables de sesión
+session_unset();
 
 // Destruir la sesión
-session_unset();
 session_destroy();
-?>
 
-<script type="text/javascript">
-    // Redirigir al login con JavaScript
-    window.location.href = 'index.php?action=login';
-</script>
+// Eliminar la cookie de usuario
+setcookie('user', '', time() - 3600, '/', '', true, true); // Establecer la cookie con tiempo en el pasado para eliminarla
 
+// Redirigir a la página de login
+header('Location: login.php');
+exit();
 ?>

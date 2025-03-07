@@ -4,9 +4,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Si el usuario ya está logueado, redirige al inicio
-if (!empty($_SESSION['usuario'])) {
-    header('Location: index.php');
+// Si el usuario ya está logueado por sesión o cookie, redirige al inicio
+if (!empty($_SESSION['usuario']) || isset($_COOKIE['user'])) {
+    header('Location: index.php');  // Redirigir si ya está logueado
     exit();
 }
 
@@ -34,8 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($resultado) {
         // Comparar la contraseña con el hash de la base de datos
         if (password_verify($contraseña, $resultado['password'])) {
-            $_SESSION['usuario'] = $resultado['user']; // Guardar el nombre de usuario en la sesión
-            header('Location: index.php?action=home'); // Redirigir al índice
+            // Regenerar la ID de sesión para evitar ataques de fijación de sesión
+            session_regenerate_id(true);
+
+            // Guardar el nombre de usuario en la sesión
+            $_SESSION['usuario'] = $resultado['user'];
+
+            // Crear cookie para mantener la sesión activa por 1 hora (3600 segundos)
+            setcookie('user', $usuario, time() + 3600, '/', '', true, true); // Cookie segura y HttpOnly
+
+            // Redirigir a la página principal después del login
+            header('Location: index.php?action=home'); 
             exit();
         } else {
             $error = 'Contraseña incorrecta.';
