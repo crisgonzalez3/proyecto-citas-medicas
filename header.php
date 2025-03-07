@@ -20,12 +20,18 @@ if (session_status() === PHP_SESSION_NONE) {
         body {
             background-color: #f9f9f9;
             font-family: 'Arial', sans-serif;
-            margin-top: 70px;
+            margin-top: 120px;
         }
         .navbar {
             background-color: #2c3e50;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* Asegúrate de que el navbar esté por encima */
         }
+
     </style>
     <!-- Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">

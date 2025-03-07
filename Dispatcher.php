@@ -156,7 +156,7 @@ class Dispatcher {
     // Método para eliminar una cita específica por su UUID
     private function delete() {
         $uuid = $_GET['uuid'] ?? '';  // Obtener el UUID desde el parámetro de la URL
-
+        
         // Verificar que el UUID esté presente
         if (empty($uuid)) {
             $this->responseJson(['success' => false, 'message' => 'UUID no proporcionado'], 400);  // Error si falta el UUID

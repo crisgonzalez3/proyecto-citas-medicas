@@ -25,7 +25,9 @@ if (!isset($_SESSION['usuario'])) {
         body {
             background: #ebf0f5;
             font-family: 'Calibri', sans-serif;
+            margin-top: 100px; /* Aumenta el margen superior para evitar que el navbar cubra el contenido */
         }
+
         /* FullCalendar container */
         #calendar {
             max-width: 900px;
@@ -49,7 +51,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <!-- Main Content -->
     <div class="container mt-6">
-        <h1 class="mb-4 text-center text-primary">Appointments Calendar</h1>
+        <!-- Aquí se eliminó el título -->
         <div id="calendar"></div>
     </div>
 

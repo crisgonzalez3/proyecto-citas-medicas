@@ -47,11 +47,12 @@ if ($appointments === null) {
                                 <button type="submit" class="btn btn-warning btn-sm">Modify</button>
                             </form>
                             <!-- Botón para eliminar -->
-                            <form action="index.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <form action="Dispatcher.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
                                 <input type="hidden" name="uuid" value="<?= htmlspecialchars($appointment['uuid']); ?>">
-                                <input type="hidden" name="action" value="delete"> <!-- Especificar la acción como 'delete' -->
+                                <input type="hidden" name="action" value="delete"> <!-- Asegurar que 'delete' se envía correctamente -->
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
+
                         </td>
 
                     </tr>
