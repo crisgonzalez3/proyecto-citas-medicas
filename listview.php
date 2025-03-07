@@ -1,7 +1,7 @@
 <?php
 //cURL en PHP para realizar una solicitud HTTP a un servidor y procesar la respuesta en formato JSON
 $ch = curl_init(); //Inicia cURL
-curl_setopt($ch, CURLOPT_URL, "http://localhost/proyecto-citas-medicas/Dispatcher.php?action=list"); //Configuración de la solicitud
+curl_setopt($ch, CURLOPT_URL, "http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=list"); //Configuración de la solicitud
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch); //Ejecutamos la solicitud y obtenemos respuesta
 curl_close($ch); //Cerramos sesión
@@ -47,7 +47,7 @@ if ($appointments === null) {
                                 <button type="submit" class="btn btn-warning btn-sm">Modify</button>
                             </form>
                             <!-- Botón para eliminar -->
-                            <form action="Dispatcher.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <form action="src/Dispatcher.php" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
                                 <input type="hidden" name="uuid" value="<?= htmlspecialchars($appointment['uuid']); ?>">
                                 <input type="hidden" name="action" value="delete"> <!-- Asegurar que 'delete' se envía correctamente -->
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>

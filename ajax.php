@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *'); // Permite solicitudes desde cualquier
 header('Access-Control-Allow-Methods: GET, POST, DELETE'); // Especifica qué métodos HTTP son permitidos.
 header('Access-Control-Allow-Headers: Content-Type'); // Permite el encabezado Content-Type.
 
-require_once 'db.php'; // Incluye la conexión a la base de datos (asegúrate de que el archivo db.php existe).
+require_once 'src/db.php'; // Incluye la conexión a la base de datos (asegúrate de que el archivo db.php existe).
 
 
 // Leemos el cuerpo de la petición (en formato JSON) enviado por el cliente.

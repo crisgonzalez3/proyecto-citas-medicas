@@ -71,7 +71,7 @@ class Dispatcher {
                 case 'listview':
                 case 'login':
                 case 'logout':
-                    header("Location: index.php?action=$action");  // Redirigir a la vista correspondiente
+                    header("Location: http://localhost/proyecto-citas-medicas/index.php?action=$action");  // Redirigir a la vista correspondiente
                     exit;
             }
         } catch (Exception $e) {
@@ -169,7 +169,7 @@ class Dispatcher {
 
         // Si la cita fue eliminada, redirigimos a la vista de lista de citas
         if ($result) {
-            header("Location: index.php?action=listview");
+            header("Location: http://localhost/proyecto-citas-medicas/index.php?action=listview");
             exit;
         } else {
             $this->responseJson(['success' => false, 'message' => 'Error al eliminar la cita'], 500);  // Error si no se pudo eliminar

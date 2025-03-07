@@ -1,6 +1,6 @@
 <?php
 // Incluir la conexión a la base de datos desde un archivo externo
-include('db.php');  // Incluye la conexión a la base de datos
+include('src/db.php');  // Incluye la conexión a la base de datos
 include('header.php');  // Incluye el encabezado (posiblemente contiene menús, scripts o estilos comunes)
 
 // Crear una instancia de la clase DB para obtener la conexión a la base de datos

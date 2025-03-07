@@ -11,7 +11,7 @@ if (!empty($_SESSION['usuario']) || isset($_COOKIE['user'])) {
 }
 
 // Incluir la conexión a la base de datos
-include('db.php'); 
+include('src/db.php'); 
 include('header.php');
 
 $error = ''; // Variable para almacenar mensajes de error

@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 // Incluir la conexión a la base de datos
-include_once('db.php');
+include_once('src/db.php');
 
 // Definir la vista por defecto
 global $view;

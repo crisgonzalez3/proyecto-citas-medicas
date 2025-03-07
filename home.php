@@ -55,7 +55,7 @@
         .hero-title {
             font-size: 3.3rem;
             font-weight: 700;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
         }
 
         .hero-subtitle {
@@ -88,7 +88,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 50vh; /* Aumentamos la altura de la sección */
+            height: 30vh; /* Aumentamos la altura de la sección */
             text-align: center;
         }
 
@@ -128,7 +128,7 @@
 
     <!-- Hero Section (con la imagen dentro) -->
     <section class="hero-section">
-        <img src="clinica.jpg" alt="Imagen de la clínica" class="hero-image">
+        <img src="public/clinica.jpg" alt="Imagen de la clínica" class="hero-image">
         <div class="hero-content">
             <h1 class="hero-title">Manage Your Dental Appointments Effortlessly</h1>
             <p class="hero-subtitle">Schedule, track, and manage your appointments with ease!</p>

@@ -85,7 +85,7 @@ if (!isset($_SESSION['usuario'])) {
         $(document).ready(function() {
             // Cambios en la función loadAppointments
             function loadAppointments() {
-                fetch('Dispatcher.php?action=list') // Llamamos a la acción 'list' de la API
+                fetch('src/Dispatcher.php?action=list') // Llamamos a la acción 'list' de la API
                     .then(response => response.json())  // Parseamos la respuesta JSON
                     .then(data => {
                         console.log("Datos de las citas:", data);  // Ver los datos recibidos

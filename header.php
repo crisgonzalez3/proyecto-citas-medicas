@@ -40,7 +40,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <header class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php?action=home">
-                <img src="logo.jpg" alt="Logo" class="logo" style="height: 50px; margin-right: 30px;">
+                <img src="public/logo.jpg" alt="Logo" class="logo" style="height: 50px; margin-right: 30px;">
                 Dental Clinic
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">

@@ -62,7 +62,7 @@
         }
 
         function loadAppointmentData(uuid) {
-            fetch(`http://localhost/proyecto-citas-medicas/Dispatcher.php?action=get&uuid=${uuid}`)
+            fetch(`http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=get&uuid=${uuid}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.uuid) {
@@ -123,7 +123,7 @@
 
     // Si todo está bien, enviar el formulario
     const formData = new FormData(this);
-    fetch('http://localhost/proyecto-citas-medicas/Dispatcher.php?action=save', {
+    fetch('http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=save', {
         method: 'POST',
         body: formData
     })
