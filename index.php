@@ -3,8 +3,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Comprobar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
+// Comprobar si el usuario está logueado, excepto en las páginas públicas
+$public_views = ['login', 'registro', 'logout'];
+$view = $_GET['action'] ?? 'home';
+
+if (!isset($_SESSION['usuario']) && !in_array($view, $public_views)) {
     header('Location: login.php');
     exit;
 }
@@ -12,20 +15,37 @@ if (!isset($_SESSION['usuario'])) {
 // Incluir la conexión a la base de datos
 include_once('src/db.php');
 
-// Definir la vista por defecto
-global $view;
-$view = $_GET['action'] ?? 'home'; // Si no se proporciona una acción, carga 'home'
-
 // Incluir el header
 include('header.php');
 
-// Incluir la vista correspondiente si el archivo existe
-$viewFile = $view . '.php';
-if (file_exists($viewFile)) {
-    include($viewFile);
-} else {
-    // Mostrar un mensaje si la vista no existe
-    echo "<h2>Página no encontrada</h2>";
+// Cargar la vista según el caso para evitar con gloval $view riesgo de 
+//"Local File Inclusion(LFI)"
+//al no haber ninguna inclusión dinamica de archivos con include($view. '.php')
+switch ($view) {
+    case 'home':
+        include('home.php');
+        break;
+    case 'calendar':
+        include('calendar.php');
+        break;
+    case 'formulario':
+        include('formulario.php');
+        break;
+    case 'listview':
+        include('listview.php');
+        break;
+    case 'registro':
+        include('registro.php');
+        break;
+    case 'login':
+        include('login.php');
+        break;
+    case 'logout':
+        include('logout.php');
+        break;
+    default:
+        echo "<h2>Página no encontrada</h2>";
+        break;
 }
 
 // Incluir el footer
