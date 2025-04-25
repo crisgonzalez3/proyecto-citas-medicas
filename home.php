@@ -19,20 +19,20 @@
         .navbar {
             background-color: #2c3e50;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10; /* Asegura que el navbar esté sobre la Hero Section */
+            z-index: 10; 
         }
 
         /* Hero Section */
         .hero-section {
             position: relative;
-            height: 45vh; /* Altura de la Hero Section */
+            height: 45vh; 
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
             padding: 20px;
-            z-index: 1; /* Asegura que la Hero Section esté debajo del Navbar */
+            z-index: 1; 
         }
 
         /* Imagen de fondo */
@@ -42,13 +42,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Asegura que la imagen cubra todo el contenedor */
-            z-index: -1; /* La imagen estará debajo del contenido */
+            object-fit: cover; 
+            z-index: -1;
         }
 
         /* Contenedor del texto */
         .hero-content {
-            position: relative; /* Se asegura de que el contenido esté encima de la imagen */
+            position: relative; 
             z-index: 1;
         }
 
@@ -88,19 +88,19 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 30vh; /* Aumentamos la altura de la sección */
+            height: 30vh; 
             text-align: center;
         }
 
         .dashboard-text {
-            font-size: 2.5rem; /* Aumentamos el tamaño del texto */
+            font-size: 2.5rem; 
             font-weight: 700;
-            margin-bottom: 30px; /* Espacio entre el título y los botones */
+            margin-bottom: 30px;
         }
 
         .button-container {
             display: flex;
-            gap: 15px; /* Espacio entre los botones */
+            gap: 15px; 
             justify-content: center;
         }
 
@@ -111,12 +111,12 @@
 
         /* Footer */
         footer {
-            background-color: #34495e; /* Fondo oscuro */
-            color: white; /* Color de texto blanco */
+            background-color: #34495e; 
+            color: white; 
             padding: 30px 0;
             text-align: center;
             font-size: 1rem;
-            margin-top: 30px; /* Espacio suficiente para separarlo del contenido anterior */
+            margin-top: 30px; 
         }
     
         footer p {

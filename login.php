@@ -1,49 +1,35 @@
 <?php
-// Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Si el usuario ya está logueado por sesión o cookie, redirige al inicio
 if (!empty($_SESSION['usuario']) || isset($_COOKIE['user'])) {
-    header('Location: index.php');  // Redirigir si ya está logueado
+    header('Location: index.php'); 
     exit();
 }
 
-// Incluir la conexión a la base de datos
 include('src/db.php'); 
 include('header.php');
 
-$error = ''; // Variable para almacenar mensajes de error
-
-// Crear una instancia de la clase DB y obtener la conexión
+$error = ''; 
 $db = new DB();
-$conn = $db->getConnection(); // Obtener la conexión PDO
+$conn = $db->getConnection(); 
 
-// Procesar el formulario al enviarlo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['usuario']);
     $contraseña = trim($_POST['contraseña']);
-
-    // Consulta para obtener el usuario y la contraseña desde la base de datos
     $stmt = $conn->prepare('SELECT user, password FROM usuario WHERE user = :usuario LIMIT 1');
     $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
     $stmt->execute();
     $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($resultado) {
-        // Comparar la contraseña con el hash de la base de datos
         if (password_verify($contraseña, $resultado['password'])) {
-            // Regenerar la ID de sesión para evitar ataques de fijación de sesión
             session_regenerate_id(true);
 
-            // Guardar el nombre de usuario en la sesión
             $_SESSION['usuario'] = $resultado['user'];
 
-            // Crear cookie para mantener la sesión activa por 1 hora (3600 segundos)
-            setcookie('user', $usuario, time() + 3600, '/', '', true, true); // Cookie segura y HttpOnly
-
-            // Redirigir a la página principal después del login
+            setcookie('user', $usuario, time() + 3600, '/', '', true, true);
             header('Location: index.php?action=home'); 
             exit();
         } else {
@@ -104,6 +90,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </html>
 
 <?php
-// Incluir el footer
 include('footer.php');
 ?>

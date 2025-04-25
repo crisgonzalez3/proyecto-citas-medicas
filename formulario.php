@@ -13,11 +13,10 @@
         body {
             background-color: #f9f9f9;
             font-family: 'Arial', sans-serif;
-            padding-top: 30px; /* Añadimos más espacio superior */
+            padding-top: 30px; 
         }
-        /* Añadimos un padding-top adicional al contenedor para el formulario */
         .container {
-            padding-top: 30px; /* Ajustar este valor si lo necesitas */
+            padding-top: 30px;
         }
     </style>
 </head>
@@ -95,33 +94,29 @@
         document.getElementById('appointment-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Obtener valores del formulario
     const date = document.getElementById('date').value;
     const time = document.getElementById('time').value;
     const patient = document.getElementById('patient').value;
     const description = document.getElementById('description').value;
-
-    // Validar los campos requeridos
+    
+//validaciones antes de enviar formulario
     if (!date || !time || !patient) {
         alert("Por favor, complete todos los campos obligatorios.");
         return;
     }
 
-    // Validar formato de la fecha (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
         alert("El formato de la fecha es incorrecto. Debe ser YYYY-MM-DD.");
         return;
     }
 
-    // Validar formato de la hora (HH:mm)
     const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
     if (!timeRegex.test(time)) {
         alert("El formato de la hora es incorrecto. Debe ser HH:mm.");
         return;
     }
 
-    // Si todo está bien, enviar el formulario
     const formData = new FormData(this);
     fetch('http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=save', {
         method: 'POST',

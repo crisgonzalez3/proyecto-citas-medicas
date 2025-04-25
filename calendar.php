@@ -1,5 +1,4 @@
 <?php
-// Comprobar si el usuario está logueado
 if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
     exit;
@@ -25,15 +24,14 @@ if (!isset($_SESSION['usuario'])) {
         body {
             background: #ebf0f5;
             font-family: 'Calibri', sans-serif;
-            margin-top: 100px; /* Aumenta el margen superior para evitar que el navbar cubra el contenido */
+            margin-top: 100px; 
         }
 
-        /* FullCalendar container */
         #calendar {
             max-width: 900px;
             margin: 40px auto;
         }
-        /* Customize event popup */
+
         .fc-event {
             cursor: pointer;
             border: 1px solid #074665;
@@ -46,16 +44,13 @@ if (!isset($_SESSION['usuario'])) {
     </style>
 </head>
 <body>
-    <!-- Incluir el header dinámicamente -->
     <div id="header-container"></div>
 
-    <!-- Main Content -->
     <div class="container mt-6">
-        <!-- Aquí se eliminó el título -->
+    
         <div id="calendar"></div>
     </div>
 
-    <!-- Modal for Event Details -->
     <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -72,49 +67,39 @@ if (!isset($_SESSION['usuario'])) {
             </div>
         </div>
     </div>
-
-    <!-- Incluir el footer dinámicamente -->
     <div id="footer-container"></div>
-
-    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
-    <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Cambios en la función loadAppointments
             function loadAppointments() {
-                fetch('src/Dispatcher.php?action=list') // Llamamos a la acción 'list' de la API
-                    .then(response => response.json())  // Parseamos la respuesta JSON
+                fetch('src/Dispatcher.php?action=list')
+                    .then(response => response.json())  
                     .then(data => {
-                        console.log("Datos de las citas:", data);  // Ver los datos recibidos
+                        console.log("Datos de las citas:", data);  
 
-                        // Convertimos los datos de citas en el formato que FullCalendar necesita
                         const events = data.map(appointment => {
                             return {
-                                id: appointment.uuid,  // Usamos uuid como ID del evento
-                                title: appointment.patient,  // El título es el nombre del paciente
-                                start: `${appointment.date}T${appointment.time}`,  // Combinamos la fecha y hora
-                                description: appointment.description || "Sin descripción",  // Descripción del evento
+                                id: appointment.uuid,  
+                                title: appointment.patient,  
+                                start: `${appointment.date}T${appointment.time}`,  
+                                description: appointment.description || "Sin descripción",  
                             };
                         });
 
-                        console.log("Eventos procesados:", events);  // Ver los eventos formateados
+                        console.log("Eventos procesados:", events);
 
-                        // Destruir el calendario previo para evitar superposiciones
                         $('#calendar').fullCalendar('destroy'); 
 
-                        // Inicializar el calendario con los eventos cargados
                         $('#calendar').fullCalendar({
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
                                 right: 'month,agendaWeek,agendaDay'
                             },
-                            events: events,  // Pasamos los eventos procesados
+                            events: events,  
                             eventClick: function(event) {
-                                // Mostrar el modal con los detalles del evento
                                 const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
                                 document.getElementById('modalTitle').innerText = 'Cita: ' + event.title;
                                 document.getElementById('modalDescription').innerText = 'Descripción: ' + event.description;
@@ -127,7 +112,7 @@ if (!isset($_SESSION['usuario'])) {
                     });
             }
 
-            loadAppointments();  // Cargar las citas cuando se cargue la página
+            loadAppointments();  
         });
     </script>
 </body>

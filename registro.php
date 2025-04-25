@@ -1,11 +1,10 @@
 <?php
 ob_start();// Incluir la conexión a la base de datos desde un archivo externo
-include('src/db.php');  // Incluye la conexión a la base de datos
-include('header.php');  // Incluye el encabezado (posiblemente contiene menús, scripts o estilos comunes)
+include('src/db.php');  
+include('header.php');  
 
-// Crear una instancia de la clase DB para obtener la conexión a la base de datos
-$db = new DB();  // Crear un objeto de la clase DB
-$conn = $db->getConnection();  // Obtener la conexión a la base de datos utilizando el método getConnection
+$db = new DB();  
+$conn = $db->getConnection();  
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -71,16 +70,13 @@ $conn = $db->getConnection();  // Obtener la conexión a la base de datos utiliz
                 </form>
 
                 <?php
-                // Procesar el formulario si se ha enviado
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
-                    // Recoger los datos del formulario
                     $name = trim($_POST['name']);
                     $surname = trim($_POST['surname']);
                     $email = trim($_POST['email']);
                     $user = trim($_POST['user']);
                     $password = trim($_POST['password']);
 
-                    // Verificar si el correo o el nombre de usuario ya están registrados en la base de datos
                     $stmt = $conn->prepare('SELECT id FROM usuario WHERE email = :email OR user = :user LIMIT 1');
                     $stmt->bindValue(':email', $email);
                     $stmt->bindValue(':user', $user);
@@ -89,10 +85,7 @@ $conn = $db->getConnection();  // Obtener la conexión a la base de datos utiliz
                     if ($stmt->rowCount() > 0) {
                         echo '<p style="color: red;">¡El correo o el nombre de usuario ya están registrados!</p>';
                     } else {
-                        // Hashear la contraseña para seguridad
                         $passwordHasheada = password_hash($password, PASSWORD_DEFAULT);
-
-                        // Insertar los datos del nuevo usuario en la base de datos
                         $stmt = $conn->prepare('INSERT INTO usuario (name, surname, email, user, password) VALUES (:name, :surname, :email, :user, :password)');
                         $stmt->bindValue(':name', $name);
                         $stmt->bindValue(':surname', $surname);
@@ -102,7 +95,6 @@ $conn = $db->getConnection();  // Obtener la conexión a la base de datos utiliz
 
                         if ($stmt->execute()) {
                             echo '<p style="color: green;">¡Usuario registrado exitosamente!</p>';
-                            // Redirige al usuario a la página de login después de un registro exitoso
                             header('Location: login.php');
                             exit();
                         } else {

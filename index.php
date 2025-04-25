@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Comprobar si el usuario está logueado, excepto en las páginas públicas
 $public_views = ['login', 'registro', 'logout'];
 $view = $_GET['action'] ?? 'home';
 
@@ -12,15 +11,10 @@ if (!isset($_SESSION['usuario']) && !in_array($view, $public_views)) {
     exit;
 }
 
-// Incluir la conexión a la base de datos
 include_once('src/db.php');
 
-// Incluir el header
 include('header.php');
 
-// Cargar la vista según el caso para evitar con gloval $view riesgo de 
-//"Local File Inclusion(LFI)"
-//al no haber ninguna inclusión dinamica de archivos con include($view. '.php')
 switch ($view) {
     case 'home':
         include('home.php');
@@ -48,6 +42,5 @@ switch ($view) {
         break;
 }
 
-// Incluir el footer
 include('footer.php');
 ?>

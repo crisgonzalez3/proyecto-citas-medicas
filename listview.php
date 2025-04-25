@@ -1,14 +1,11 @@
 <?php
-//cURL en PHP para realizar una solicitud HTTP a un servidor y procesar la respuesta en formato JSON
-$ch = curl_init(); //Inicia cURL
-curl_setopt($ch, CURLOPT_URL, "http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=list"); //Configuración de la solicitud
+$ch = curl_init(); 
+curl_setopt($ch, CURLOPT_URL, "http://localhost/proyecto-citas-medicas/src/Dispatcher.php?action=list"); 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch); //Ejecutamos la solicitud y obtenemos respuesta
-curl_close($ch); //Cerramos sesión
+$response = curl_exec($ch); 
+curl_close($ch); 
 
-$appointments = json_decode($response, true); //Convertimos la respuesta (JSON) a un array asociativo de PHP
-
-// Manejo de errores en la conversión JSON
+$appointments = json_decode($response, true); 
 if ($appointments === null) {
     $appointments = [];
 }

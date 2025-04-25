@@ -29,7 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000; /* Asegúrate de que el navbar esté por encima */
+            z-index: 1000; 
         }
 
     </style>
