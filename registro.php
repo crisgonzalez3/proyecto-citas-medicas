@@ -1,5 +1,5 @@
 <?php
-// Incluir la conexión a la base de datos desde un archivo externo
+ob_start();// Incluir la conexión a la base de datos desde un archivo externo
 include('src/db.php');  // Incluye la conexión a la base de datos
 include('header.php');  // Incluye el encabezado (posiblemente contiene menús, scripts o estilos comunes)
 
@@ -7,7 +7,6 @@ include('header.php');  // Incluye el encabezado (posiblemente contiene menús, 
 $db = new DB();  // Crear un objeto de la clase DB
 $conn = $db->getConnection();  // Obtener la conexión a la base de datos utilizando el método getConnection
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -116,11 +115,9 @@ $conn = $db->getConnection();  // Obtener la conexión a la base de datos utiliz
         </div>
     </div>
 </div>
-
 <?php
-// Incluir el footer desde un archivo externo
 include('footer.php');
+ob_end_flush();
 ?>
-
 </body>
 </html>
