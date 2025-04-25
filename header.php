@@ -9,12 +9,10 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dental Clinic</title>
-    <!-- jQuery -->
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-    <!-- Font Awesome for user icon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
@@ -33,7 +31,6 @@ if (session_status() === PHP_SESSION_NONE) {
         }
 
     </style>
-    <!-- Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -56,12 +53,10 @@ if (session_status() === PHP_SESSION_NONE) {
                     </li>
                     <li class="nav-item">
                     <?php if (!empty($_SESSION['usuario'])): ?>
-                        <!-- Mostrar el botón de Logout solo si la sesión está abierta -->
                         <a class="nav-link" href="index.php?action=logout">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     <?php else: ?>
-                        <!-- Mostrar el botón de Login solo si la sesión está cerrada -->
                         <a class="nav-link" href="index.php?action=login">
                             <i class="fas fa-user"></i> Login
                         </a>

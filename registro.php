@@ -1,5 +1,5 @@
 <?php
-ob_start();// Incluir la conexión a la base de datos desde un archivo externo
+ob_start();
 include('src/db.php');  
 include('header.php');  
 
@@ -33,39 +33,27 @@ $conn = $db->getConnection();
         <div class="col-md-6">
             <div class="card p-4">
                 <h2>Formulario de Registro</h2>
-                <!-- Formulario de registro de usuario -->
                 <form action="registro.php" method="POST">
-                    <!-- Campo para el nombre del usuario -->
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre:</label>
                         <input type="text" name="name" id="name" class="form-control" required>
                     </div>
-
-                    <!-- Campo para el apellido del usuario -->
                     <div class="mb-3">
                         <label for="surname" class="form-label">Apellido:</label>
                         <input type="text" name="surname" id="surname" class="form-control" required>
                     </div>
-
-                    <!-- Campo para el correo electrónico del usuario -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo Electrónico:</label>
                         <input type="email" name="email" id="email" class="form-control" required>
                     </div>
-
-                    <!-- Campo para el nombre de usuario -->
                     <div class="mb-3">
                         <label for="user" class="form-label">Nombre de Usuario:</label>
                         <input type="text" name="user" id="user" class="form-control" required>
                     </div>
-
-                    <!-- Campo para la contraseña del usuario -->
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña:</label>
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>
-
-                    <!-- Botón para enviar el formulario -->
                     <button type="submit" class="btn btn-success">Registrar</button>
                 </form>
 

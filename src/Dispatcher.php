@@ -1,10 +1,8 @@
 <?php
-header('Content-Type: application/json');  // Especifica que la respuesta será en formato JSON
-header('Access-Control-Allow-Origin: *');  // Permite solicitudes desde cualquier dominio (CORS)
-header('Access-Control-Allow-Methods: GET, POST, DELETE, HEAD, OPTIONS');  // Métodos HTTP permitidos
-header('Access-Control-Allow-Headers: Content-Type');  // Permite encabezados de tipo Content-Type
-
-// Incluir la clase de conexión a la base de datos
+header('Content-Type: application/json');  
+header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Methods: GET, POST, DELETE, HEAD, OPTIONS');  
+header('Access-Control-Allow-Headers: Content-Type');  
 include_once('db.php');
 
 class Dispatcher {

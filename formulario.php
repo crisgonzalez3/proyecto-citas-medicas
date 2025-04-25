@@ -98,8 +98,7 @@
     const time = document.getElementById('time').value;
     const patient = document.getElementById('patient').value;
     const description = document.getElementById('description').value;
-    
-//validaciones antes de enviar formulario
+
     if (!date || !time || !patient) {
         alert("Por favor, complete todos los campos obligatorios.");
         return;

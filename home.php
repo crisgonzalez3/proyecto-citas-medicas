@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointments</title>
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -15,14 +13,12 @@
             margin-top: 70px;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #2c3e50;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 10; 
         }
 
-        /* Hero Section */
         .hero-section {
             position: relative;
             height: 45vh; 
@@ -35,7 +31,6 @@
             z-index: 1; 
         }
 
-        /* Imagen de fondo */
         .hero-image {
             position: absolute;
             top: 0;
@@ -46,7 +41,6 @@
             z-index: -1;
         }
 
-        /* Contenedor del texto */
         .hero-content {
             position: relative; 
             z-index: 1;
@@ -65,7 +59,6 @@
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
         }
 
-        /* Botones personalizados */
         .btn-custom {
             background-color: #00b4b3;
             border: 2px solid #00b4b3;
@@ -82,7 +75,6 @@
             transform: scale(1.1);
         }
 
-        /* Ajuste para la sección de los botones y el texto de bienvenida */
         .main-content {
             display: flex;
             flex-direction: column;
@@ -104,12 +96,10 @@
             justify-content: center;
         }
 
-        /* Espacio debajo del Hero */
         .container.mt-5.pt-4 {
             margin-top: 0;
         }
 
-        /* Footer */
         footer {
             background-color: #34495e; 
             color: white; 
@@ -126,7 +116,6 @@
 </head>
 <body>
 
-    <!-- Hero Section (con la imagen dentro) -->
     <section class="hero-section">
         <img src="public/clinica.jpg" alt="Imagen de la clínica" class="hero-image">
         <div class="hero-content">
@@ -135,7 +124,6 @@
         </div>
     </section>
 
-    <!-- Main Content -->
     <div class="main-content">
         <h1 class="dashboard-text">Welcome to Your Appointment Dashboard</h1>
         
@@ -146,9 +134,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    
-    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
