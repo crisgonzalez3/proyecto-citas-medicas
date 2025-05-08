@@ -17,7 +17,7 @@ $conn = $db->getConnection();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <style>
         body {
-            background-color: #f9f9f9;
+            background-color: #f9f9f9;   
             font-family: 'Arial', sans-serif;
             padding-top: 30px;
         }
@@ -70,26 +70,26 @@ $conn = $db->getConnection();
                     $stmt->bindValue(':user', $user);
                     $stmt->execute();
 
-                    if ($stmt->rowCount() > 0) {
-                        echo '<p style="color: red;">¡El correo o el nombre de usuario ya están registrados!</p>';
-                    } else {
-                        $passwordHasheada = password_hash($password, PASSWORD_DEFAULT);
-                        $stmt = $conn->prepare('INSERT INTO usuario (name, surname, email, user, password) VALUES (:name, :surname, :email, :user, :password)');
-                        $stmt->bindValue(':name', $name);
-                        $stmt->bindValue(':surname', $surname);
-                        $stmt->bindValue(':email', $email);
-                        $stmt->bindValue(':user', $user);
-                        $stmt->bindValue(':password', $passwordHasheada);
+                if ($stmt->rowCount() > 0) {
+                    echo '<p style="color: red;">¡El correo o el nombre de usuario ya están registrados!</p>';
+                } else {
+                    $passwordHasheada = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt = $conn->prepare('INSERT INTO usuario (name, surname, email, user, password) VALUES (:name, :surname, :email, :user, :password)');
+                    $stmt->bindValue(':name', $name);
+                    $stmt->bindValue(':surname', $surname);
+                    $stmt->bindValue(':email', $email);
+                    $stmt->bindValue(':user', $user);
+                    $stmt->bindValue(':password', $passwordHasheada);
 
-                        if ($stmt->execute()) {
-                            echo '<p style="color: green;">¡Usuario registrado exitosamente!</p>';
-                            header('Location: login.php');
-                            exit();
-                        } else {
-                            echo '<p style="color: red;">Error al registrar el usuario.</p>';
-                        }
-                    }
-                }
+                if ($stmt->execute()) {
+                    echo '<p style="color: green;">¡Usuario registrado exitosamente!</p>';
+                    header('Location: login.php');
+                    exit();
+                } else {
+                    echo '<p style="color: red;">Error al registrar el usuario.</p>';
+                   }
+                 }
+               }
                 ?>
             </div>
         </div>
