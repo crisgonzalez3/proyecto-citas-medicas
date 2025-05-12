@@ -94,7 +94,8 @@ if (!isset($_SESSION['usuario'])) {
                                 center: 'title',
                                 right: 'month,agendaWeek,agendaDay'
                             },
-                            events: events,  
+                            firstDay: 1, // <-- Añade esta línea para que la semana comience en lunes
+                            events: events,
                             eventClick: function(event) {
                                 const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
                                 document.getElementById('modalTitle').innerText = 'Cita: ' + event.title;
@@ -102,6 +103,7 @@ if (!isset($_SESSION['usuario'])) {
                                 modal.show();
                             }
                         });
+
                     })
                     .catch(error => {
                         console.error('Error al cargar las citas:', error);
