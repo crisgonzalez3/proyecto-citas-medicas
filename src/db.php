@@ -3,7 +3,7 @@ class DB {
     private static $host = 'localhost'; 
     private static $dbname = 'proyecto_citas_medicas';
     private static $username = 'root'; 
-    private static $password = ''; 
+    private static $password = '123456'; 
     private static $port = 3306; 
     private static $conn = null;
 

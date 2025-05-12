@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario']) && !in_array($view, $public_views)) {
     exit;
 }
 
-include_once('src/db.php');
+//include_once('src/db.php');
 
 include('header.php');
 
